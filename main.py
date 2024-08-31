@@ -11,16 +11,31 @@ def index():
     if request.method == "POST":
         selected_eq = request.form.get('eq_select').strip()
         quantity_eq = request.form.get('eq_quantity').strip()
+        return equacoes(selected_eq, quantity_eq)
 
+Exemplo = """
+<form action="/equacoes">
+    <label>Massa Padrão:</label>
+    <input type="int" required>
+    <label>Fator de equivalência:</label>
+    <input type="int" required>
+    <label>Volume de NaOH:</label>
+    <input type="int" required>
+</form>
+"""
 
-
-@app.route("/calculus",  methods=["GET","POST"])
+@app.route("/equacoes",  methods=["GET","POST"])
 def equacoes(selected_eq, quantity_eq):
-    if request.method == "GET":
-        return
+    if request.method == "POST":
+
+        result = Exemplo
+        for _ in range(int(quantity_eq) - 1):
+            result += '</br>' + Exemplo
+        print(result)
+
+        return render_template('equacoes.html', result=result)
     
-    return render_template('equacoes.html')
-
-
+    else: return 
+    
 if __name__ == '__main__':
     app.run(debug=True)

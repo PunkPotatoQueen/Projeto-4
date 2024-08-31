@@ -1,17 +1,10 @@
-{ % extends 'base.hmtl' %}
+{% extends 'base.html' %}
 
 {% block main %}
 <main>
-    <div>
-        <form action="/equacoes">
-            <label>Massa Padrão:</label>
-            <input type="int">
-            <label>Fator de equivalência:</label>
-            <input type="int">
-            <label>Volume de NaOH:</label>
-            <input type="int">
-        </form>
+    <div >
+        {{result | safe}}
+        <button type='submit'>Submeter</button>
     </div>
 </main>
-
 {% endblock %}
