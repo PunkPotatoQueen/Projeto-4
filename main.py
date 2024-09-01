@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from libs.docx_malipulator import DocxGenerator, generate_random_docx
+from libs.docx_manipulator import DocxGenerator, generate_random_docx
 
 app = Flask(__name__)
 
@@ -40,10 +40,15 @@ def equacoes(selected_eq, quantity_eq):
 
 
 @app.route("/gerar-docx")
-def relatorio_pdf():
+def relatorio_docx():
     generate_random_docx()
 
     return redirect(url_for('static', filename='docs/teste01.docx'))
+
+@app.route("/gerar-xlsx")
+def planilha_xlsx():
+
+    return redirect(url_for('static', filename='planilhas/planilha.xlsx'))
 
 
 if __name__ == '__main__':
