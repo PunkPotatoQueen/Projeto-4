@@ -16,7 +16,8 @@ def calcular_concentracao_molar(massa_soluto, massa_molar, volume_solucao):
     concentracao = massa_soluto / (massa_molar * volume_solucao)
     return concentracao
 
-
+if __name__ == '__main__':
+    
     #Utilizando exemplos padrão
     massa_padrao = 0.85
     fator_equivalencia = 1
@@ -38,6 +39,4 @@ def calcular_concentracao_molar(massa_soluto, massa_molar, volume_solucao):
 
     concentracao_molar = calcular_concentracao_molar(massa_soluto, massa_molar, volume_solucao)
     print(f"Concentração molar: {concentracao_molar:.4f} mol/L")
-
-
-#     print(f"O tempo de execução das formulas  foi de {end-start} milisegundos")
+    #print(f"O tempo de execução das formulas  foi de {end-start} milisegundos")
