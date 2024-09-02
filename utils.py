@@ -1,5 +1,6 @@
 def select_base(selected_eq , quantity_eq):
     result=''
+
     if selected_eq == "valor 3":
         for i in range(int(quantity_eq)):
             base_cm=f"""
