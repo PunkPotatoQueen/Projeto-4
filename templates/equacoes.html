@@ -3,8 +3,10 @@
 {% block main %}
 <main>
     <div >
-        {{result | safe}}
-        <button type='submit'>Submeter</button>
+        <form action="/" method="POST">
+            {{result | safe}}<br><br>
+            <button type='submit'>Submeter</button>
+        </form>
     </div>
     <div class="export-buttons">
         <a class="btn-docx" href="/gerar-docx">Gerar Documento<i class='bx bxs-file-doc'></i></a>
