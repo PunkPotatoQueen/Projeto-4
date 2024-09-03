@@ -5,26 +5,33 @@ calculus = app
 
 def thread_concentracao_sem_correcao(valores):
     with cf.ThreadPoolExecutor() as executor:
-        # results = executor.submit(lambda args: calculus.calcular_concentracao_sem_correcao(*args), valores)
-        results = [executor.submit(calculus.calcular_concentracao_sem_correcao,*args) for args in valores]
+        results = executor.map(lambda args: calculus.calcular_concentracao_sem_correcao(*args), valores)
+        # results = [executor.submit(calculus.calcular_concentracao_sem_correcao,*args) for args in valores]
+        resultados = []
+        for f in results:
+            resultados.append(f)
 
-        for f in cf.as_completed(results):
-            print(f.result())
+        return resultados
 
 def thread_concentracao_com_correcao(valores):
     with cf.ThreadPoolExecutor() as executor:
-        results = [executor.submit(calculus.calcular_concentracao_com_correcao,*args) for args in valores]
+        results = executor.map(lambda args: calculus.calcular_concentracao_com_correcao(*args), valores)
+        # results = [executor.submit(calculus.calcular_concentracao_com_correcao,*args) for args in valores]
+        resultados = []
+        for f in results:
+            resultados.append(f)
 
-        for f in cf.as_completed(results):
-            print(f.result())
+        return resultados
 
 def thread_concentracao_molar(valores):
     with cf.ThreadPoolExecutor() as executor:
-        # results = executor.map(lambda args: calculus.calcular_concentracao_molar(*args), valores)
-        results = [executor.submit(calculus.calcular_concentracao_molar, *args) for args in valores]
-        
-        for f in cf.as_completed(results):
-            print(f.result())
+        results = executor.map(lambda args: calculus.calcular_concentracao_molar(*args), valores)
+        # results = [executor.submit(calculus.calcular_concentracao_molar, *args) for args in valores]
+        resultados = []
+        for f in results:
+            resultados.append(f)
+
+        return resultados
 
 if __name__ == "__main__":
         

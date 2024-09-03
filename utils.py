@@ -26,8 +26,8 @@ def select_base(selected_eq , quantity_eq):
             <label for="VN_result_{i}">Volume de NaOH:</label>
             <input type="int" name="VN_result_{i}" id="VN_result_{i}" required>"""
             if selected_eq == "valor 2":
-                correcao = """
-            <label for= "FC_result_{i}">Fator de Correção:</label>
+                correcao =f"""
+            <label for="FC_result_{i}" >Fator de Correção:</label>
             <input type="int" name="FC_result_{i}" id="FC_result_{i}" required>"""
                 base_csc += correcao
 
