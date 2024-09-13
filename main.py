@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from libs.docx_manipulator import DocxGenerator, generate_random_docx
 from utils import *
 from paralelismo import *
+from validacao import validar_entrada  
 
 app = Flask(__name__)
 
@@ -13,10 +14,9 @@ def index():
     if request.method == "POST":
         selected_eq = request.form.get('eq_select').strip()
         quantity_eq = request.form.get('eq_quantity').strip()
-
         return redirect(url_for("equacoes", selected_eq=selected_eq, quantity_eq=quantity_eq))
 
-@app.route("/equacoes",  methods=["GET","POST"])
+@app.route("/equacoes", methods=["GET","POST"])
 def equacoes():
     global selected_eq_atual
     global quantity_eq_atual
@@ -27,36 +27,61 @@ def equacoes():
         quantity_eq = request.args.get("quantity_eq")
         selected_eq_atual = selected_eq
         quantity_eq_atual = quantity_eq
-
-        base = select_base(selected_eq_atual,quantity_eq_atual)
-        return render_template('equacoes.html', result=base)
+        base = select_base(selected_eq_atual, quantity_eq_atual)
+        return render_template('equacoes.html', result=base, error_msg=None)
     
     if request.method == "POST":
-        valores_totais = []   # lista que irá armazenar todas as variáveis fornecidas pelo usuário
+        valores_totais = []   
+        error_msg = None
+        
         if selected_eq_atual == "valor 3":
             for i in range(int(quantity_eq_atual)):
-                valores_atuais = [] 
                 ms_result = request.form.get(f"MS_result_{i}")
                 mm_result = request.form.get(f"MM_result_{i}")
                 vs_result = request.form.get(f"VS_result_{i}")
-                valores_atuais.extend([int(ms_result),int(mm_result),int(vs_result)])
-                valores_totais.append(valores_atuais)
+                
+                # Validação
+                valid_ms, msg_ms = validar_entrada(ms_result)
+                valid_mm, msg_mm = validar_entrada(mm_result)
+                valid_vs, msg_vs = validar_entrada(vs_result)
+                
+                if not (valid_ms and valid_mm and valid_vs):
+                    error_msg = f"Erros encontrados: {msg_ms} {msg_mm} {msg_vs}"
+                    base = select_base(selected_eq_atual, quantity_eq_atual)
+                    return render_template('equacoes.html', result=base, error_msg=error_msg)
+                
+                valores_totais.append([float(ms_result), float(mm_result), float(vs_result)])
             
             return redirect("/resultados")
         
         else:
             for i in range(int(quantity_eq_atual)):
-                valores_atuais = []
                 mp_result = request.form.get(f"MP_result_{i}")
                 fe_result = request.form.get(f"FE_result_{i}")
                 vn_result = request.form.get(f"VN_result_{i}")
-                valores_atuais.extend([int(mp_result),int(fe_result),int(vn_result)])
+                
+                # Validação
+                valid_mp, msg_mp = validar_entrada(mp_result)
+                valid_fe, msg_fe = validar_entrada(fe_result)
+                valid_vn, msg_vn = validar_entrada(vn_result)
+                
+                if not (valid_mp and valid_fe and valid_vn):
+                    error_msg = f"Erros encontrados: {msg_mp} {msg_fe} {msg_vn}"
+                    if selected_eq_atual == "valor 2":
+                        fc_result = request.form.get(f"FC_result_{i}")
+                        valid_fc, msg_fc = validar_entrada(fc_result)
+                        error_msg += f" {msg_fc}"
+                    
+                    base = select_base(selected_eq_atual, quantity_eq_atual)
+                    return render_template('equacoes.html', result=base, error_msg=error_msg)
+                
                 if selected_eq_atual == "valor 2":
-                    vc_result = request.form.get(f"FC_result_{i}")
-                    valores_atuais.append(int(vc_result))
-                valores_totais.append(valores_atuais)
+                    fc_result = request.form.get(f"FC_result_{i}")
+                    valores_totais.append([float(mp_result), float(fe_result), float(vn_result), float(fc_result)])
+                else:
+                    valores_totais.append([float(mp_result), float(fe_result), float(vn_result)])
+            
             return redirect("/resultados")
-
 
 @app.route("/resultados", methods=["GET"])
 def resultados():
@@ -76,13 +101,11 @@ def resultados():
 @app.route("/gerar-docx")
 def relatorio_docx():
     generate_random_docx()
-
     return redirect(url_for('static', filename='docs/teste01.docx'))
 
 @app.route("/gerar-xlsx")
 def planilha_xlsx():
     return redirect(url_for('static', filename='planilhas/planilha.xlsx'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
