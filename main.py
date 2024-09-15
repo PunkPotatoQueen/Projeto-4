@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
-from libs.docx_manipulator import DocxGenerator, generate_random_docx
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from libs.docx_manipulator import DocxGenerator
 from utils import *
 from paralelismo import *
-from validacao import validar_entrada  
+from validacao import validar_entrada
+
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ def index():
         selected_eq = request.form.get('eq_select').strip()
         quantity_eq = request.form.get('eq_quantity').strip()
         return redirect(url_for("equacoes", selected_eq=selected_eq, quantity_eq=quantity_eq))
+
 
 @app.route("/equacoes", methods=["GET","POST"])
 def equacoes():
@@ -83,25 +85,56 @@ def equacoes():
             
             return redirect("/resultados")
 
+
 @app.route("/resultados", methods=["GET"])
 def resultados():
     selected_eq = selected_eq_atual
     variaveis = valores_totais
-    html = ''
+    
     if selected_eq == "valor 1":
         resultado = thread_concentracao_sem_correcao(variaveis)
     elif selected_eq == "valor 2":
         resultado = thread_concentracao_com_correcao(variaveis)
     elif selected_eq == "valor 3":
         resultado = thread_concentracao_molar(variaveis)
-    for f in resultado:
-        html += f"""<h1>{f}</h1><br>"""
-    return html
+    
+    dados_equacao = {
+        'opcao': selected_eq,
+        'variaveis': variaveis,
+        'resultados': resultado,
+    }
 
-@app.route("/gerar-docx")
+    return render_template('resultados.html', dados_equacao=dados_equacao)
+
+
+@app.route("/gerar-docx", methods=['POST'])
 def relatorio_docx():
-    generate_random_docx()
-    return redirect(url_for('static', filename='docs/teste01.docx'))
+    dados_equacao = request.get_json()
+    document = DocxGenerator()
+
+    records = dados_equacao['variaveis']
+
+    for indice, variaveis in enumerate(records):
+        variaveis.insert(0, indice+1)
+        variaveis.append(dados_equacao['resultados'][indice])
+
+    if dados_equacao['opcao'] == 'valor 1':
+        document.add_table_concentracao_sem_correcao(records)
+    elif dados_equacao['opcao'] == 'valor 2':
+        document.add_table_concentracao_com_correcao(records)
+    elif dados_equacao['opcao'] == 'valor 3':
+        document.add_table_concentracao_molar(records)
+    
+    filename = 'exemplo'
+    document.save_doc(filename)
+
+    return jsonify({'redirect': url_for('dowload_docx', filename=filename)})
+
+
+@app.route('/dowload-docx/<filename>')
+def dowload_docx(filename):
+    return redirect(url_for('static', filename=f'docs/{filename}.docx'))
+
 
 @app.route("/gerar-xlsx")
 def planilha_xlsx():
