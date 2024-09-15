@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for
 from libs.docx_manipulator import DocxGenerator, generate_random_docx
 from utils import *
 from paralelismo import *
-from validacao import validar_entrada  
+from validacao import validar_entrada
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == 'GET':
         return render_template('index.html')
@@ -16,7 +16,7 @@ def index():
         quantity_eq = request.form.get('eq_quantity').strip()
         return redirect(url_for("equacoes", selected_eq=selected_eq, quantity_eq=quantity_eq))
 
-@app.route("/equacoes", methods=["GET","POST"])
+@app.route("/equacoes", methods=["GET", "POST"])
 def equacoes():
     global selected_eq_atual
     global quantity_eq_atual
@@ -31,7 +31,7 @@ def equacoes():
         return render_template('equacoes.html', result=base, error_msg=None)
     
     if request.method == "POST":
-        valores_totais = []   
+        valores_totais = []
         error_msg = None
         
         if selected_eq_atual == "valor 3":
@@ -40,7 +40,6 @@ def equacoes():
                 mm_result = request.form.get(f"MM_result_{i}")
                 vs_result = request.form.get(f"VS_result_{i}")
                 
-                # Validação
                 valid_ms, msg_ms = validar_entrada(ms_result)
                 valid_mm, msg_mm = validar_entrada(mm_result)
                 valid_vs, msg_vs = validar_entrada(vs_result)
@@ -60,7 +59,6 @@ def equacoes():
                 fe_result = request.form.get(f"FE_result_{i}")
                 vn_result = request.form.get(f"VN_result_{i}")
                 
-                # Validação
                 valid_mp, msg_mp = validar_entrada(mp_result)
                 valid_fe, msg_fe = validar_entrada(fe_result)
                 valid_vn, msg_vn = validar_entrada(vn_result)

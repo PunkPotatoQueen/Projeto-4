@@ -1,23 +1,15 @@
-def validar_valores(valores, tipo):
-    erros = []
+def validar_entrada(valor, min_val=None, max_val=None):
 
-    for i, valor in enumerate(valores):
-        if tipo == "valor 3":
-            if len(valor) != 3 or not all(isinstance(v, (int, float)) for v in valor):
-                erros.append(f"Erro na Equação {i + 1}: Todos os valores devem ser números válidos.")
-        else:
-            if len(valor) < 3 or not all(isinstance(v, (int, float)) for v in valor[:3]):
-                erros.append(f"Erro na Equação {i + 1}: Massa Padrão, Fator de Equivalência e Volume de NaOH devem ser números válidos.")
-            if tipo == "valor 2" and (len(valor) < 4 or not isinstance(valor[3], (int, float))):
-                erros.append(f"Erro na Equação {i + 1}: Fator de Correção deve ser um número válido.")
-
-    return erros
-
-def validar_entrada(entrada):
-    if entrada is None or entrada.strip() == "":
-        return False, "Valor não pode ser vazio."
     try:
-        float(entrada) 
+        valor_float = float(valor)
+
+        if min_val is not None and valor_float < min_val:
+            return False, f"Valor menor que o mínimo permitido ({min_val})"
+
+        if max_val is not None and valor_float > max_val:
+            return False, f"Valor maior que o máximo permitido ({max_val})"
+
         return True, ""
+
     except ValueError:
-        return False, "Valor deve ser um número válido."
+        return False, "Valor inválido, por favor insira um número"
