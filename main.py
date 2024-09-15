@@ -33,11 +33,12 @@ def equacoes():
         return render_template('equacoes.html', result=base, error_msg=None)
     
     if request.method == "POST":
-        valores_totais = []   
+        valores_totais = []
         error_msg = None
         
         if selected_eq_atual == "valor 3":
             for i in range(int(quantity_eq_atual)):
+                i+=1
                 ms_result = request.form.get(f"MS_result_{i}")
                 mm_result = request.form.get(f"MM_result_{i}")
                 vs_result = request.form.get(f"VS_result_{i}")
@@ -58,6 +59,7 @@ def equacoes():
         
         else:
             for i in range(int(quantity_eq_atual)):
+                i+=1
                 mp_result = request.form.get(f"MP_result_{i}")
                 fe_result = request.form.get(f"FE_result_{i}")
                 vn_result = request.form.get(f"VN_result_{i}")
