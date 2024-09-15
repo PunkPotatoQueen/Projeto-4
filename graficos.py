@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os  # Importa o módulo os para manipulação de diretórios
 
 # Funções fornecidas
 def calcular_fator_correcao(pureza_real):
@@ -51,4 +52,15 @@ plt.ylabel('Concentração de NaOH (mol/L)')
 plt.title('Comparação de Concentração de NaOH com e sem Correção')
 plt.legend()
 plt.grid(True)
+
+# Define um caminho relativo para salvar a imagem
+caminho_relativo = os.path.join('imagens', 'comparacao_concentracao_naoh.png')
+
+# Cria o diretório 'imagens' se ele não existir
+os.makedirs(os.path.dirname(caminho_relativo), exist_ok=True)
+
+# Salvando o gráfico no diretório especificado
+plt.savefig(caminho_relativo, format='png', dpi=300)
+
+# Exibindo o gráfico
 plt.show()
