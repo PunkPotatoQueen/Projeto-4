@@ -64,3 +64,4 @@ plt.savefig(caminho_relativo, format='png', dpi=300)
 
 # Exibindo o gráfico
 plt.show()
+plt.show()

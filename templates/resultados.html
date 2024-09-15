@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<main>
+    <h2>Resultados</h2>
+    {%for resultado in dados_equacao['resultados'] %} 
+        <p>{{ resultado }}</p> 
+    {%endfor%} 
+
+    <div class="export-buttons">
+        <button type="button" class="btn docx" onclick="sendData()">Gerar Documento <i class='bx bxs-file-doc'></i></button>
+        <a class="btn xlsx" href="/gerar-xlsx">Gerar Planilha <i class='bx bx-spreadsheet'></i></a>
+    </div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+    function sendData() {
+        const data = {{ dados_equacao | tojson }};
+
+        fetch('/gerar-docx', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        })
+    }
+</script>
+{% endblock %}

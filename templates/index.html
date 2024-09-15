@@ -5,14 +5,14 @@
     <h2>Página Principal</h2>
     <div>
         <form action="/" method="POST">
-            <label for="eq_select">Selecione o a equação que solicita realizar:</label>
-            <select for="eq_select" name="eq_select" id="eq_select" >
+            <label for="eq_select">Selecione a equação que deseja realizar:</label>
+            <select name="eq_select" id="eq_select">
                 <option value="valor 1">Concentração de NaOH sem correção</option>
                 <option value="valor 2">Concentração de NaOH com correção</option>
                 <option value="valor 3">Concentração molar</option>
             </select></br></br>
             <label for="eq_quantity"> Quantas vezes deseja calcular: </label>
-            <input type="int" name="eq_quantity" id="eq_quantity" required></br>
+            <input type="number" min="1" name="eq_quantity" id="eq_quantity" required></br>
             <button type="submit">Começar</button>
         </form>
     </div>

@@ -1,16 +1,30 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Calculadora de Concentrações</h1>
+    </header>
 
-{% block main %}
-<main>
-    <div >
-        {{result | safe}}
-        <button type='submit'>Submeter</button>
-    </div>
-    <div class="export-buttons">
-        <a class="btn-docx" href="/gerar-docx">Gerar Documento<i class='bx bxs-file-doc'></i></a>
-    </div>
-    <div class="export-buttons">
-        <a class="btn-xlsx" href="/gerar-xlsx">Gerar Planilha<i class='bx bxs-file-xlxs'></i></a>
-    </div>
-</main>
-{% endblock %}
+    <main>
+        <form action="" method="POST">
+            {{ result|safe }}
+
+            {% if error_msg %}
+                <div class="alert">{{ error_msg }}</div>
+            {% endif %}
+
+            <button type="submit">Calcular</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sua Empresa</p>
+    </footer>
+</body>
+</html>
