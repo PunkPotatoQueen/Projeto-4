@@ -3,16 +3,17 @@
 {% block main %}
 <main>
     <h2>Resultados</h2>
-    {%for resultado in dados_equacao['resultados'] %} 
+    {% for resultado in dados_equacao['resultados'] %} 
         <p>{{ resultado }}</p> 
-    {%endfor%} 
+    {% endfor %}
 
     <div class="export-buttons">
         <button type="button" class="btn docx" onclick="sendData()">Gerar Documento <i class='bx bxs-file-doc'></i></button>
-        <a class="btn xlsx" href="/gerar-xlsx">Gerar Planilha <i class='bx bx-spreadsheet'></i></a>
+        <button type="button" class="btn xlsx" onclick="generateExcel()">Gerar Planilha <i class='bx bx-spreadsheet'></i></button>
     </div>
 </main>
 {% endblock %}
+
 {% block scripts %}
 <script>
     function sendData() {
@@ -30,7 +31,29 @@
             if (data.redirect) {
                 window.location.href = data.redirect;
             }
+        });
+    }
+
+    function generateExcel() {
+        const data = {{ dados_equacao | tojson }};
+
+        fetch('/gerar-planilha', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resultados_calculos.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        });
     }
 </script>
 {% endblock %}
