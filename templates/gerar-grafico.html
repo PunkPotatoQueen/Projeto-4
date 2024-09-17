@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<main>
+    <h2>Gerar Gráfico de Concentração</h2>
+    <div>
+        <form action="/grafico" method="POST">
+            <label for="massa_padrao">Massa Padrão (g):</label>
+            <input type="text" name="massa_padrao" required><br>
+
+            <label for="fator_equivalencia">Fator de Equivalência:</label>
+            <input type="text" name="fator_equivalencia" required><br>
+
+            <label for="volume_naoh">Volume de NaOH (L):</label>
+            <input type="text" name="volume_naoh" required><br>
+
+            <label for="pureza_real_values">Valores de Pureza Real (separados por vírgula):</label>
+            <input type="text" name="pureza_real_values" required><br>
+
+            <button type="submit">Gerar Gráfico</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

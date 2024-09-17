@@ -20,8 +20,14 @@ massa_padrao = 0.85
 fator_equivalencia = 1
 volume_naoh = 0.025
 
-# Valores de pureza real para gerar o gráfico
-pureza_real_values = [90, 92, 94, 96, 98, 99, 99.8, 100]
+# Solicitando entrada de valores do usuário
+massa_padrao = float(input("Insira a massa padrão (g): "))
+fator_equivalencia = float(input("Insira o fator de equivalência: "))
+volume_naoh = float(input("Insira o volume de NaOH (L): "))
+
+# Recebendo os valores de pureza real do usuário
+pureza_real_values = input("Insira os valores de pureza real separados por vírgula (ex: 90,92,94,...): ")
+pureza_real_values = [float(valor) for valor in pureza_real_values.split(",")]
 
 # Criando listas para armazenar as concentrações
 concentracao_naoh_sem_correcao = []
@@ -63,5 +69,4 @@ os.makedirs(os.path.dirname(caminho_relativo), exist_ok=True)
 plt.savefig(caminho_relativo, format='png', dpi=300)
 
 # Exibindo o gráfico
-plt.show()
 plt.show()
